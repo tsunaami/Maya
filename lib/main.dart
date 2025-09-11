@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/LoginPage.dart';
+import 'package:untitled/ShakeFeaturePage.dart';
 import 'package:untitled/logo.dart';
+
+import 'CreateAccountPage.dart';
+import 'GlobalFeautures.dart';
+import 'ModeSelectionScreen.dart';
+import 'MotherModeFeaturesPage.dart';
 
 void main() {
   runApp(const Maya());
@@ -17,10 +23,9 @@ class Maya extends StatelessWidget {
       title: 'Maya',
       theme: ThemeData(
 
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
       ),
-      home: const Logo(),
+      home: const GlobalFeaturesPage(),
     );
   }
 }
-
