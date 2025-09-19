@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
-class  CreateAccountPage extends StatefulWidget {
+import 'package:untitled/ModeSelectionPage.dart';
+import 'auth_services.dart';
+class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
 
   @override
@@ -11,7 +12,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+  TextEditingController();
 
   final Color lightPinkBackground = const Color(0xFFFFE4E9);
   final Color magentaText = const Color(0xFFD80073);
@@ -25,21 +27,44 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     super.dispose();
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      String email = _emailController.text;
-      String password = _passwordController.text;
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
 
-      print('Creating account with:');
-      print('Email: $email');
-      print('Password: $password');
+      try {
+        final authService = AuthService();
+        final newUser = await authService.signUpWithEmailAndPassword(
+          email,
+          password,
+          displayName: email.split('@').first,
+        );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Account created successfully for $email!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+        debugPrint("✅ Account created: ${newUser.uid} | ${newUser.email}");
+
+        if (!mounted) return;
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const ModeSelectionPage()),
+              (Route<dynamic> route) => false,
+        );
+      } on AuthServiceException catch (e) {
+        debugPrint("⚠️ Signup failed: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.message),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } catch (e) {
+        debugPrint("❌ Unexpected error: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Something went wrong. Please try again."),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -52,8 +77,16 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle labelStyle = TextStyle(color: magentaText, fontSize: 16, fontWeight: FontWeight.w500);
-    final TextStyle buttonTextStyle = TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
+    final TextStyle labelStyle = TextStyle(
+      color: magentaText,
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+    );
+    final TextStyle buttonTextStyle = const TextStyle(
+      color: Colors.white,
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+    );
     final InputBorder inputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(12.0),
       borderSide: BorderSide(color: magentaText.withOpacity(0.5)),
@@ -65,7 +98,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
     return Scaffold(
       backgroundColor: lightPinkBackground,
-     
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -81,7 +113,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   decoration: InputDecoration(
                     labelText: 'Email Address',
                     labelStyle: labelStyle,
-                    prefixIcon: Icon(Icons.email_outlined, color: magentaText.withOpacity(0.7)),
+                    prefixIcon: Icon(
+                      Icons.email_outlined,
+                      color: magentaText.withOpacity(0.7),
+                    ),
                     border: inputBorder,
                     enabledBorder: inputBorder,
                     focusedBorder: focusedInputBorder,
@@ -93,7 +128,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
-                    if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+                    if (!RegExp(
+                      r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                    ).hasMatch(value)) {
                       return 'Please enter a valid email address';
                     }
                     return null;
@@ -106,7 +143,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   decoration: InputDecoration(
                     labelText: 'Password',
                     labelStyle: labelStyle,
-                    prefixIcon: Icon(Icons.lock_outline, color: magentaText.withOpacity(0.7)),
+                    prefixIcon: Icon(
+                      Icons.lock_outline,
+                      color: magentaText.withOpacity(0.7),
+                    ),
                     border: inputBorder,
                     enabledBorder: inputBorder,
                     focusedBorder: focusedInputBorder,
@@ -131,7 +171,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   decoration: InputDecoration(
                     labelText: 'Confirm Password',
                     labelStyle: labelStyle,
-                    prefixIcon: Icon(Icons.lock_reset_outlined, color: magentaText.withOpacity(0.7)),
+                    prefixIcon: Icon(
+                      Icons.lock_reset_outlined,
+                      color: magentaText.withOpacity(0.7),
+                    ),
                     border: inputBorder,
                     enabledBorder: inputBorder,
                     focusedBorder: focusedInputBorder,

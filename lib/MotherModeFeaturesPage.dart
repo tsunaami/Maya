@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/Mothermodefeature.dart';
+import 'package:flutter/material.dart';
+import 'PregnancyGuideScreen.dart'; // Import the new file
+
 class MotherModeFeaturesPage extends StatefulWidget {
   const MotherModeFeaturesPage({super.key});
 
@@ -149,22 +151,42 @@ class _MotherModeFeaturesPageState extends State<MotherModeFeaturesPage> {
                         _buildFeatureCard(
                           'Doctor Appointment Reminders',
                           const Icon(Icons.calendar_today, color: Colors.pink),
+                          onTap: () {
+                            // TODO: Add navigation or functionality for Doctor Appointment Reminders
+                          },
                         ),
                         _buildFeatureCard(
                           'Pregnancy Diet Plan & Nutrition Tips',
                           const Icon(Icons.restaurant, color: Colors.pink),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PregnancyGuideScreen(),
+                              ),
+                            );
+                          },
                         ),
                         _buildFeatureCard(
                           'Maternity Emergency Button: Calls ambulance or doctor instantly',
                           const Icon(Icons.phone_in_talk, color: Colors.red),
+                          onTap: () {
+                            // TODO: Add functionality for the Emergency Button
+                          },
                         ),
                         _buildFeatureCard(
                           'Mental Health Support: 24/7 helpline and stress relief tips',
                           const Icon(Icons.favorite, color: Colors.pink),
+                          onTap: () {
+                            // TODO: Add navigation or functionality for Mental Health Support
+                          },
                         ),
                         _buildFeatureCard(
                           'Fetal Movement & Contraction Tracker',
                           const Icon(Icons.track_changes, color: Colors.pink),
+                          onTap: () {
+                            // TODO: Add navigation or functionality for the Tracker
+                          },
                         ),
                       ],
                     ),
@@ -202,42 +224,46 @@ class _MotherModeFeaturesPageState extends State<MotherModeFeaturesPage> {
     );
   }
 
-  Widget _buildFeatureCard(String title, Icon icon) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, 5),
-          ),
-        ],
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFFCE4EC),
-            Color(0xFFF8BBD0),
-          ],
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            icon,
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF880E4F),
-              ),
+  Widget _buildFeatureCard(String title, Icon icon, {VoidCallback? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10,
+              offset: Offset(0, 5),
             ),
           ],
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFFFCE4EC),
+              Color(0xFFF8BBD0),
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              icon,
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF880E4F),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

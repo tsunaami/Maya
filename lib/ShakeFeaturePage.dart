@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 // Assuming sos_feature_data.dart is where SOSFeatureItem and sosFeatures are defined
 // For this example, I've included them directly above.
 
-import 'package:flutter/material.dart';
 
 class SOSFeatureItem {
   final IconData icon;

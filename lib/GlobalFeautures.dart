@@ -1,8 +1,19 @@
 import 'dart:async'; // Required for StreamSubscription
 import 'package:flutter/material.dart';
-import 'package:sensors_plus/sensors_plus.dart'; // Required for shake detection
+import 'package:sensors_plus/sensors_plus.dart';
+import 'package:untitled/LoginPage.dart';
+import 'package:untitled/PregnancyGuideScreen.dart';
+import 'AnonymousCrimereporting.dart';
+import 'SafetytipScreen.dart';
+import 'SelfdefensetutorialScreen.dart';
 import 'ShakeFeaturePage.dart';
+import 'AnonymousCrimeReportPage.dart';
+import 'EmergencyCallPage.dart';
+import 'ReportListPage.dart'; // New import for the reports page
 
+// New imports for the features you added
+import 'safety_tips_screen.dart';
+import 'self_defense_tutorial_screen.dart';
 
 // --- Theme Definitions ---
 class AppThemes {
@@ -13,11 +24,9 @@ class AppThemes {
     colorScheme: ColorScheme.light(
       primary: Colors.amber[400]!,
       secondary: Colors.orangeAccent,
-      background: Colors.yellow[50]!,
       surface: Colors.white,
       onPrimary: Colors.black,
       onSecondary: Colors.black,
-      onBackground: Colors.black87,
       onSurface: Colors.black87,
       error: Colors.redAccent,
       onError: Colors.white,
@@ -27,11 +36,17 @@ class AppThemes {
       foregroundColor: Colors.black87,
     ),
     textTheme: const TextTheme(
-      headlineMedium: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+      headlineMedium: TextStyle(
+        color: Colors.black87,
+        fontWeight: FontWeight.bold,
+      ),
       bodyLarge: TextStyle(color: Colors.black54),
-      titleMedium: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+      titleMedium: TextStyle(
+        color: Colors.black87,
+        fontWeight: FontWeight.bold,
+      ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
@@ -40,8 +55,10 @@ class AppThemes {
       style: TextButton.styleFrom(foregroundColor: Colors.orange[800]),
     ),
     radioTheme: RadioThemeData(
-      fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+      fillColor: WidgetStateProperty.resolveWith<Color?>((
+        Set<WidgetState> states,
+      ) {
+        if (states.contains(WidgetState.selected)) {
           return Colors.orange[700];
         }
         return Colors.black54;
@@ -56,7 +73,6 @@ class AppThemes {
     colorScheme: ColorScheme.light(
       primary: Colors.deepOrange[500]!,
       secondary: Colors.redAccent,
-      background: Colors.orange[50]!,
       surface: Colors.white,
       onPrimary: Colors.white,
       onSecondary: Colors.white,
@@ -70,11 +86,17 @@ class AppThemes {
       foregroundColor: Colors.white,
     ),
     textTheme: const TextTheme(
-      headlineMedium: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+      headlineMedium: TextStyle(
+        color: Colors.black87,
+        fontWeight: FontWeight.bold,
+      ),
       bodyLarge: TextStyle(color: Colors.black54),
-      titleMedium: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+      titleMedium: TextStyle(
+        color: Colors.black87,
+        fontWeight: FontWeight.bold,
+      ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
@@ -83,8 +105,10 @@ class AppThemes {
       style: TextButton.styleFrom(foregroundColor: Colors.red[800]),
     ),
     radioTheme: RadioThemeData(
-      fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+      fillColor: WidgetStateProperty.resolveWith<Color?>((
+        Set<WidgetState> states,
+      ) {
+        if (states.contains(WidgetState.selected)) {
           return Colors.red[700];
         }
         return Colors.black54;
@@ -113,22 +137,27 @@ class AppThemes {
       foregroundColor: Colors.white,
     ),
     textTheme: const TextTheme(
-      headlineMedium: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      headlineMedium: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      ),
       bodyLarge: TextStyle(color: Colors.white70),
       titleMedium: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
     ),
-    cardTheme: CardTheme(
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: Colors.grey[800]
+    cardTheme: CardThemeData(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: Colors.grey[800],
     ),
     iconTheme: IconThemeData(color: Colors.purpleAccent[100]),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(foregroundColor: Colors.purpleAccent[100]),
     ),
     radioTheme: RadioThemeData(
-      fillColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+      fillColor: WidgetStateProperty.resolveWith<Color?>((
+        Set<WidgetState> states,
+      ) {
+        if (states.contains(WidgetState.selected)) {
           return Colors.purpleAccent[100];
         }
         return Colors.white70;
@@ -146,22 +175,127 @@ class FeatureItem {
   FeatureItem({required this.icon, required this.name, required this.onTap});
 }
 
-List<FeatureItem> globalFeatures = [
-  FeatureItem(icon: Icons.route_outlined, name: 'Select Best Route', onTap: () => print('Route tapped')),
-  FeatureItem(icon: Icons.sos_outlined, name: 'SOS Button', onTap: () => print('SOS tapped')),
-  FeatureItem(icon: Icons.sports_kabaddi_outlined, name: 'Self Defense Tutorial', onTap: () => print('Self Defense tapped')),
-  FeatureItem(icon: Icons.shield_outlined, name: 'Trusted Circle', onTap: () => print('Trusted Circle tapped')),
-  FeatureItem(icon: Icons.call_outlined, name: 'Emergency Call', onTap: () => print('Emergency Call tapped')),
-  FeatureItem(icon: Icons.location_on_outlined, name: 'Geo Fencing', onTap: () => print('Geo Fencing tapped')),
-  FeatureItem(icon: Icons.report_problem_outlined, name: 'Anonymous Crime Reporting', onTap: () => print('Anonymous Crime Reporting tapped')),
-  FeatureItem(icon: Icons.lightbulb_outline, name: 'Safety Tips', onTap: () => print('Safety Tips tapped')),
+// Global features now need a context to navigate
+List<FeatureItem> globalFeatures(BuildContext context) => [
+  FeatureItem(
+    icon: Icons.route_outlined,
+    name: 'Select Best Route',
+    onTap: () => print('Route tapped'),
+  ),
+  FeatureItem(
+    icon: Icons.sos_outlined,
+    name: 'SOS Button',
+    onTap: () => print('SOS tapped'),
+  ),
+  FeatureItem(
+    icon: Icons.sports_kabaddi_outlined,
+    name: 'Self Defense Tutorial',
+    onTap: () {
+      // Corrected navigation logic
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SelfDefenseTutorialScreen(),
+        ),
+      );
+    },
+  ),
+  FeatureItem(
+    icon: Icons.shield_outlined,
+    name: 'Trusted Circle',
+    onTap: () => print('Trusted Circle tapped'),
+  ),
+  FeatureItem(
+    icon: Icons.call_outlined,
+    name: 'Emergency Call',
+    onTap: () {
+      // Navigate to the EmergencyCallPage
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const EmergencyCallPage()),
+      );
+      print('Emergency Call tapped');
+    },
+  ),
+  FeatureItem(
+    icon: Icons.location_on_outlined,
+    name: 'Geo Fencing',
+    onTap: () => print('Geo Fencing tapped'),
+  ),
+  FeatureItem(
+    icon: Icons.report_problem_outlined,
+    name: 'Anonymous Crime Reporting',
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AnonymousCrimeReportPage(),
+        ),
+      );
+    },
+  ),
+  FeatureItem(
+    icon: Icons.list_alt_outlined,
+    name: 'View Recent Reports',
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ReportListPage()),
+      );
+    },
+  ),
+  FeatureItem(
+    icon: Icons.lightbulb_outline,
+    name: 'Safety Tips',
+    onTap: () {
+      // Corrected navigation logic
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SafetyTipsScreen()),
+      );
+    },
+  ),
+];
+
+// Mother mode features also need a context
+List<FeatureItem> motherModeFeatures(BuildContext context) => [
+  FeatureItem(
+    icon: Icons.restaurant_menu_outlined,
+    name: 'Pregnancy Diet Plan',
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const PregnancyGuideScreen()),
+      );
+    },
+  ),
+  FeatureItem(
+    icon: Icons.calendar_today_outlined,
+    name: 'Doctor Appointment Reminders',
+    onTap: () => print('Appointments tapped'),
+  ),
+  FeatureItem(
+    icon: Icons.local_hospital_outlined,
+    name: 'Maternity Emergency',
+    onTap: () => print('Maternity Emergency tapped'),
+  ),
+  FeatureItem(
+    icon: Icons.self_improvement_outlined,
+    name: 'Mental Health',
+    onTap: () => print('Mental Health tapped'),
+  ),
+  FeatureItem(
+    icon: Icons.track_changes_outlined,
+    name: 'Fetal Movement & Contraction Tracker',
+    onTap: () => print('Tracker tapped'),
+  ),
 ];
 
 // --- User Mode ---
 enum UserMode { normal, mother }
 
 // --- GlobalFeaturesPage ---
-class GlobalFeaturesPage extends StatefulWidget { // Ensure it's StatefulWidget
+class GlobalFeaturesPage extends StatefulWidget {
   final String userName;
 
   const GlobalFeaturesPage({super.key, this.userName = "User"});
@@ -176,24 +310,24 @@ class _GlobalFeaturesPageState extends State<GlobalFeaturesPage> {
   ThemeData _currentTheme = AppThemes.morningTheme;
   String _greeting = "Good Morning";
 
-  // --- Shake Detection Variables --- ADD THESE ---
   StreamSubscription? _accelerometerSubscription;
   double _lastX = 0.0, _lastY = 0.0, _lastZ = 0.0;
   DateTime? _lastShakeTime;
-  final double _shakeThreshold = 15.0; // Adjust sensitivity
-  final int _shakeCooldownMillis = 2000; // 2 seconds cooldown
+  final double _shakeThreshold = 15.0;
+  final int _shakeCooldownMillis = 2000;
 
   @override
   void initState() {
     super.initState();
     _updateThemeAndGreeting();
-    _startListeningToShake(); // --- ADD THIS CALL ---
+    _startListeningToShake();
   }
 
-  // --- ADD THIS METHOD for starting shake detection ---
   void _startListeningToShake() {
-    _accelerometerSubscription = accelerometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen(
-          (AccelerometerEvent event) {
+    _accelerometerSubscription = accelerometerEventStream(
+      samplingPeriod: SensorInterval.uiInterval,
+    ).listen(
+      (AccelerometerEvent event) {
         double x = event.x;
         double y = event.y;
         double z = event.z;
@@ -202,11 +336,15 @@ class _GlobalFeaturesPageState extends State<GlobalFeaturesPage> {
         double deltaY = (y - _lastY).abs();
         double deltaZ = (z - _lastZ).abs();
 
-        if (deltaX > _shakeThreshold || deltaY > _shakeThreshold || deltaZ > _shakeThreshold) {
+        if (deltaX > _shakeThreshold ||
+            deltaY > _shakeThreshold ||
+            deltaZ > _shakeThreshold) {
           DateTime now = DateTime.now();
-          if (_lastShakeTime == null || now.difference(_lastShakeTime!).inMilliseconds > _shakeCooldownMillis) {
+          if (_lastShakeTime == null ||
+              now.difference(_lastShakeTime!).inMilliseconds >
+                  _shakeCooldownMillis) {
             _lastShakeTime = now;
-            print("Shake Detected on GlobalFeaturesPage!"); // For debugging
+            print("Shake Detected on GlobalFeaturesPage!");
             _triggerSOS();
           }
         }
@@ -221,9 +359,8 @@ class _GlobalFeaturesPageState extends State<GlobalFeaturesPage> {
     );
   }
 
-  // --- ADD THIS METHOD for triggering SOS navigation ---
   void _triggerSOS() {
-    if (!mounted) return; // Check if the widget is still in the tree
+    if (!mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SOSActivationPage()),
@@ -232,11 +369,10 @@ class _GlobalFeaturesPageState extends State<GlobalFeaturesPage> {
 
   @override
   void dispose() {
-    _accelerometerSubscription?.cancel(); // --- ADD THIS to cancel subscription ---
+    _accelerometerSubscription?.cancel();
     super.dispose();
   }
 
-  // --- Your existing methods for theme, greeting, mode, logout ---
   void _updateThemeAndGreeting() {
     final hour = DateTime.now().hour;
     setState(() {
@@ -255,19 +391,24 @@ class _GlobalFeaturesPageState extends State<GlobalFeaturesPage> {
 
   void _onModeChanged(UserMode? value) {
     if (value != null) {
-      setState(() {
-        _selectedMode = value;
-        print("Mode changed to: $_selectedMode");
-      });
+      if (_selectedMode != value) {
+        setState(() {
+          _selectedMode = value;
+          print("Mode changed to: $_selectedMode");
+        });
+      }
+      Navigator.pop(context);
     }
   }
 
   void _logout() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
     print("Logout tapped");
-    // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
   }
 
-  // --- Your build method and UI helper methods ---
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -275,7 +416,11 @@ class _GlobalFeaturesPageState extends State<GlobalFeaturesPage> {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(_selectedMode == UserMode.mother ? "Mother Mode" : "Global Features"),
+          title: Text(
+            _selectedMode == UserMode.mother
+                ? "Mother Mode"
+                : "Global Features",
+          ),
           leading: IconButton(
             icon: const Icon(Icons.menu),
             onPressed: () => _scaffoldKey.currentState?.openDrawer(),
@@ -289,77 +434,90 @@ class _GlobalFeaturesPageState extends State<GlobalFeaturesPage> {
 
   Drawer _buildDrawer() {
     return Drawer(
-      backgroundColor: Color(0xFFB5293B),
+      backgroundColor: const Color(0xFFB5293B),
       child: Builder(
-          builder: (drawerContext) {
-            final theme = Theme.of(drawerContext);
-            return ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Color(0xFFB5293B),
-                  ),
-                  child: Text(
-                    'App Menu',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ),
+        builder: (drawerContext) {
+          final theme = Theme.of(drawerContext);
+          return ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              const DrawerHeader(
+                decoration: BoxDecoration(color: Color(0xFFB5293B)),
+                child: Text(
+                  'App Menu',
+                  style: TextStyle(color: Colors.white, fontSize: 24),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Text("Switch Mode", style: theme.textTheme.titleMedium),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
                 ),
-                RadioListTile<UserMode>(
-                  title: Text('Normal Mode', style: TextStyle(color: theme.textTheme.bodyLarge?.color)),
-                  value: UserMode.normal,
-                  groupValue: _selectedMode,
-                  onChanged: _onModeChanged,
-                  activeColor: theme.radioTheme.fillColor?.resolve({MaterialState.selected}),
+                child: Text("Switch Mode", style: theme.textTheme.titleMedium),
+              ),
+              RadioListTile<UserMode>(
+                title: Text(
+                  'Normal Mode',
+                  style: TextStyle(color: theme.textTheme.bodyLarge?.color),
                 ),
-                RadioListTile<UserMode>(
-                  title: Text('Mother Mode', style: TextStyle(color: theme.textTheme.bodyLarge?.color)),
-                  value: UserMode.mother,
-                  groupValue: _selectedMode,
-                  onChanged: _onModeChanged,
-                  activeColor: theme.radioTheme.fillColor?.resolve({MaterialState.selected}),
+                value: UserMode.normal,
+                groupValue: _selectedMode,
+                onChanged: _onModeChanged,
+                activeColor: theme.radioTheme.fillColor?.resolve({
+                  WidgetState.selected,
+                }),
+              ),
+              RadioListTile<UserMode>(
+                title: Text(
+                  'Mother Mode',
+                  style: TextStyle(color: theme.textTheme.bodyLarge?.color),
                 ),
-                const Divider(),
-                ListTile(
-                  leading: Icon(Icons.info_outline, color: theme.iconTheme.color),
-                  title: Text('About', style: TextStyle(color: theme.textTheme.bodyLarge?.color)),
-                  onTap: () {
-                    Navigator.pop(drawerContext);
-                  },
+                value: UserMode.mother,
+                groupValue: _selectedMode,
+                onChanged: _onModeChanged,
+                activeColor: theme.radioTheme.fillColor?.resolve({
+                  WidgetState.selected,
+                }),
+              ),
+              const Divider(),
+              ListTile(
+                leading: Icon(Icons.info_outline, color: theme.iconTheme.color),
+                title: Text(
+                  'About',
+                  style: TextStyle(color: theme.textTheme.bodyLarge?.color),
                 ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: TextButton(
-                    onPressed: _logout,
-                    style: theme.textButtonTheme.style,
-                    child: const Text('Logout', style: TextStyle(fontSize: 16)),
-                  ),
+                onTap: () {
+                  Navigator.pop(drawerContext);
+                },
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextButton(
+                  onPressed: _logout,
+                  style: theme.textButtonTheme.style,
+                  child: const Text('Logout', style: TextStyle(fontSize: 16)),
                 ),
-              ],
-            );
-          }
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
   Widget _buildBody() {
+    final featuresToShow =
+        _selectedMode == UserMode.mother
+            ? motherModeFeatures(context)
+            : globalFeatures(context);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            _greeting,
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
+          Text(_greeting, style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 24),
           GridView.builder(
             shrinkWrap: true,
@@ -370,9 +528,9 @@ class _GlobalFeaturesPageState extends State<GlobalFeaturesPage> {
               mainAxisSpacing: 16.0,
               childAspectRatio: 0.9,
             ),
-            itemCount: globalFeatures.length,
+            itemCount: featuresToShow.length,
             itemBuilder: (context, index) {
-              final feature = globalFeatures[index];
+              final feature = featuresToShow[index];
               return _buildFeatureCard(feature);
             },
           ),
@@ -381,14 +539,14 @@ class _GlobalFeaturesPageState extends State<GlobalFeaturesPage> {
     );
   }
 
-  Widget _buildFeatureCard(FeatureItem feature) {
+  Widget _buildFeatureCard(FeatureItem feature, {VoidCallback? onTap}) {
     final cardGradient = LinearGradient(
       colors: [Colors.pink[300]!, Colors.pink[100]!],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     );
-    final cardTextStyle = TextStyle(
-      color: Colors.grey[800],
+    const cardTextStyle = TextStyle(
+      color: Color.fromARGB(255, 14, 14, 14),
       fontWeight: FontWeight.bold,
       fontSize: 15,
     );
@@ -396,9 +554,11 @@ class _GlobalFeaturesPageState extends State<GlobalFeaturesPage> {
 
     return Card(
       elevation: Theme.of(context).cardTheme.elevation ?? 2,
-      shape: Theme.of(context).cardTheme.shape ?? RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape:
+          Theme.of(context).cardTheme.shape ??
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        onTap: feature.onTap,
+        onTap: onTap ?? feature.onTap,
         borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: BoxDecoration(
@@ -426,8 +586,3 @@ class _GlobalFeaturesPageState extends State<GlobalFeaturesPage> {
     );
   }
 }
-
-// Ensure you have sos_activation_page.dart in your project and it's correctly imported.
-// If SOSActivationPage is in a different path, adjust the import statement at the top.
-// For example: import 'pages/sos_activation_page.dart';
-

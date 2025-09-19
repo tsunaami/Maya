@@ -1,8 +1,8 @@
 // lib/splash_screen.dart
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:untitled/LoginPage.dart'; // Assuming your LoginPage is here
-import 'package:untitled/logo.dart'; // Assuming your AppLogo is here
+import 'package:untitled/LoginPage.dart';
+import 'package:untitled/app_constants.dart';
 
 class Logo extends StatefulWidget {
   const Logo({super.key});
@@ -11,13 +11,15 @@ class Logo extends StatefulWidget {
   State<Logo> createState() => _LogoState();
 }
 
-class _LogoState extends State<Logo>
-    with SingleTickerProviderStateMixin { // Use the mixin
+class _LogoState extends State<Logo> with SingleTickerProviderStateMixin {
+  // Use the mixin
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
 
-  final Duration _splashDuration = const Duration(seconds: 3); // Total duration of splash
+  final Duration _splashDuration = const Duration(
+    seconds: 3,
+  ); // Total duration of splash
 
   @override
   void initState() {
@@ -29,10 +31,7 @@ class _LogoState extends State<Logo>
     );
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeIn,
-      ),
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
     );
 
     _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
@@ -50,7 +49,8 @@ class _LogoState extends State<Logo>
   }
 
   void _navigateToLogin() {
-    if (mounted) { // Check if the widget is still in the tree
+    if (mounted) {
+      // Check if the widget is still in the tree
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginPage()),
       );
@@ -73,8 +73,7 @@ class _LogoState extends State<Logo>
           child: FadeTransition(
             opacity: _fadeAnimation,
 
-
-              child: Image.asset('assets/images/logo.jpg'),
+            child: Image.asset(AppConstants.logoPath),
             // Use your AppLogo widget
           ),
         ),
