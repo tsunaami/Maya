@@ -38,23 +38,6 @@ Replace lib/firebase_options.dart with your config
 4. Run the app
 bashflutter run
 
-## Project Structure
-lib/
-├── main.dart                  → App entry + Firebase init
-├── LoginPage.dart             → Beautiful pink login
-├── CreateAccountPage.dart     → Signup with validation
-├── GlobalFeaturesPage.dart    → Main dashboard + shake SOS
-├── AnonymousCrimeReportPage.dart → Anonymous reporting
-├── ReportListPage.dart        → Live reports feed
-├── EmergencyCallPage.dart     → 999, 112, etc.
-├── SafetyTipsScreen.dart      → 50+ safety tips
-├── SelfDefenseTutorialScreen.dart → Videos + instructors
-├── PregnancyGuideScreen.dart  → Monthly diet & care
-├── MotherModeFeaturesPage.dart → Mother mode UI
-├── auth_services.dart         → Custom AuthService (mock + Firebase-ready)
-├── firebase_options.dart      → Auto-generated
-└── splash_screen.dart         → Animated logo splash
-
 ## Future Ideas
 
 - Live location sharing in SOS
@@ -70,3 +53,4 @@ lib/
 - Rubida Zakir Joya
 - Anika Ashraf
 - And you? Join us!
+
